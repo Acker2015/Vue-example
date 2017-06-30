@@ -1,0 +1,46 @@
+<html>
+   <head>
+      <title>Vue Example</title>
+      <meta charset="utf-8">
+      <style>
+         .div{ margin:10px;padding:12px; border:2px solid #666; width:60px;}
+         .static{height:200px; width: 200px;background-color: pink;}
+         .active{border:2px solid #000; opacity: 0.7;}
+         .error{border: 2px solid red;}
+      </style>
+   </head>
+
+   <body>
+      <div id='app' class="static" v-bind:class="{active:isActive, error: hasError}">
+         <button v-on:click="c1()">active?</button>
+         <button v-on:click="c2()">error?</button>
+         <div :class="classObj"></div>
+         <div :class="[o1, o2, classObj]"></div>
+      </div>
+      
+      <script src='../lib/vue.js' type="text/javascript"></script>
+      <script type="text/javascript">
+      var app = new Vue({
+         el: '#app',
+         data: {
+            isActive: false,
+            hasError: false,
+            classObj: {
+               o1: true,
+               o2: true
+            },
+            o1: 'ooo1',
+            o2: 'ooo2'
+         },
+         methods: {
+            c1: function(){
+               this.isActive = !this.isActive;
+            },
+            c2: function(){
+               this.hasError = !this.hasError;
+            }
+         }
+      })
+      </script>
+   </body>
+</html>
