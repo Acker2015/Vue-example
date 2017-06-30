@@ -1,0 +1,85 @@
+<html>
+   <head>
+      <title>Vue Example</title>
+      <meta charset="utf-8">
+      <style>
+         .div{ margin:10px;padding:12px; border:2px solid #666; width:60px;}
+      </style>
+   </head>
+
+   <body>
+      <div id="example">
+         <p>Orifinal message: "{{message}}"</p>
+         <p>Computed reversed message: "{{reversedMessage}}"</p>
+         <p>Methods to reverse message: "{{reversedMessage_method()}}"</p>
+      </div>
+      <div id="app">
+         <input type="text" v-model='message' name="" :value='message'>
+      </div>
+      <hr>
+      <div id="watch-example">
+         <p>
+            Ask a yes/no question:
+            <input type="text" v-model='question' name="">
+         </p>
+         <p>{{answer}}</p>
+      </div>
+      
+      <script src='../lib/vue.js' type="text/javascript"></script>
+      <script src="https://unpkg.com/axios@0.12.0/dist/axios.min.js"></script>
+      <script src="https://unpkg.com/lodash@4.13.1/lodash.min.js"></script>
+      <script type="text/javascript">
+         var mes = 'Hello';
+         var vm = new Vue({
+            el: '#example',
+            data: {
+               message: mes
+            },
+            computed: {
+               reversedMessage: function(){
+                  return this.message.split('').reverse().join('');
+               }
+            },
+            methods: {
+               reversedMessage_method: function(){
+                  return this.message.split('').reverse().join('');
+               }
+            }
+         })
+
+         var app = new Vue({
+            el: '#app',
+            data: {
+               message: vm.message
+            }
+         });
+
+         var watchExampleVM = new Vue({
+            el:'#watch-example',
+            data: {
+               question: '',
+               answer: 'I cannot give you an answer until you ask a question.'
+            },
+            watch: {
+               question: function(newQuestion){
+                  this.answer = 'Waiting got you to stop typing...'
+                  this.getAnswer();
+               }
+            },
+            methods: {
+               getAnswer: _.debounce(function(){
+                  var vm = this;
+                  if(this.question.indexOf('?') === -1){
+                     vm.answer = 'Questions usually contain a question mark:-)';
+                     return;
+                  }
+                  vm.answer = 'Thinking...';
+                  axios.get('https://yesno.wtf/api')
+                     .then(res=>{vm.answer = _.capitalize(res.data.answer)})
+                     .catch(err=>{vm.answer = 'Error! Could not reach the API. ' + err})
+               }, 500)
+            }
+         });
+      </script>
+   </body>
+</html>
