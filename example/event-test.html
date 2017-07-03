@@ -1,0 +1,60 @@
+<html>
+   <head>
+      <title>Vue Example</title>
+      <meta charset="utf-8">
+      <style>
+      .outer {height: 500px;width: 500px;background-color: #ddd;position: relative;color:white;}
+      .inner {position: absolute;height: 300px;width: 300px;background-color: #ccc;top: 100px;left: 100px;opacity:0.5;text-align: center;
+      }
+      .iinner_l {position: absolute; height:50px; width: 50px; left:180px; top:425px;background-color: #000;}
+      .iinner_r {position: absolute; height:50px; width: 50px; left:240px; top:425px;background-color: #000;}
+      .inner a {color:#000; margin-top: 90px; display: block; padding:5px;}
+      </style>
+   </head>
+
+   <body>
+      <div id='app' v-bind:class='[outer]' v-on:click.self='bubble_2'>
+         <div v-bind:class='[inner]' v-on:click.capture='bubble'>
+            <a href="www.baidu.com" v-on:click.prevent.stop='con'>Click(prevent default behavior)</a>
+            <form action='/'>
+               <button type='submit' v-on:click.stop = 'bubble'>Submit</button>
+            </form>
+            <button v-on:click='button_click'>Click</button>
+            <button v-on:click.prevent.once='button_click_once'>Click once</button>
+            <hr>
+            <button @keyup.delete='key'>key</button>
+            <input type="text" @keyup.alt.67='dootherthing' name="">
+         </div>
+         <div v-bind:class='[iinner_l]' @click.ctrl='dosomething' >1</div>
+         <div v-bind:class='[iinner_r]' @keyup.ctrl.67='dootherthing' >2</div>
+      </div>
+      <script src='../lib/vue.js' type="text/javascript"></script>
+      <script type="text/javascript">
+         var pp = new Vue({
+            el: '#app',
+            data: {
+               inner: 'inner',
+               outer: 'outer',
+               iinner_l: 'iinner_l',
+               iinner_r: 'iinner_r'
+            },
+            methods: {
+               con: function(){
+                  console.log('prevent jump to other page.');
+               },
+               bubble: function(){
+                  alert('inner div: click.');
+               },
+               bubble_2 : function(){
+                  alert('outer div: click')
+               },
+               button_click: () => alert('button click'),
+               button_click_once: () => alert('button click once'),
+               key: () => alert('op key!'),
+               dosomething: ()=> alert('control: click+ctrl'),
+               dootherthing: () => alert('control: alt + c')
+            }
+         });
+      </script>
+   </body>
+</html>
