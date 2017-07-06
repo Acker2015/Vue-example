@@ -1,0 +1,55 @@
+<html>
+   <head>
+      <title>Vue Example</title>
+      <meta charset="utf-8">
+      <style>
+      </style>
+   </head>
+
+   <body>
+      <div id='app'>
+         {{msg}}
+         <chocie>
+            <item :value='msg'>test</item>
+         </chocie>
+         <hr>
+         <list-chioce>
+            <list-item :its='pd'></list-item>
+         </list-chioce>
+      </div>
+      <script src='../lib/vue.js' type="text/javascript"></script>
+      <script type="text/javascript">
+         Vue.component('chocie', {
+            template: '<div><ul><slot></slot></ul></div>'
+         })
+         Vue.component('list-chioce', {
+            template: '<div><slot></slot></div>'
+         })
+         Vue.component('item', {
+            functional: true,
+            render: (h, context) => {
+               return h('li', {
+                  on: {
+                     click: () => console.log(context)
+                  }
+               }, context.children)
+            }
+         });
+         Vue.component('list-item', {
+            functional: true,
+            render: (h, context) => {
+               return h('ul', context.props.its.map((d, i) => h('li', {
+                  on: {click: () => console.log(context.props)}
+               }, d)))
+            }
+         })
+         new Vue({
+            el: '#app',
+            data: {
+               msg: 'Hello',
+               pd: ['list-1', 'list-2', 'list-3']
+            }
+         })
+      </script>
+   </body>
+</html>
