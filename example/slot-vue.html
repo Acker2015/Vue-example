@@ -1,0 +1,68 @@
+<html>
+   <head>
+      <title>Vue Example</title>
+      <meta charset="utf-8">
+      <style>
+         .Alert__close {
+            font-weight: bold;
+            cursor: pointer;
+            border:1px solid;
+         }
+         .Alert--Success{
+            color: green;
+         }
+         .Alert--Warning{
+            color: #aa0;
+         }
+         .Alert--Error {
+            color: red;
+         }
+      </style>
+   </head>
+
+   <body>
+      <div id='app'>
+         <alert></alert>
+         <alert type="success">
+           <strong>Success!</strong> Looks good to me!
+         </alert>
+         <alert type="warning">
+           <strong>Warning!</strong> Something not good.
+         </alert>
+         <alert type="error">
+           <strong>Error!</strong> Oooops...
+         </alert>
+      </div>
+      <template id='alert-template'>
+         <div :class='alertClasses' v-show='show'>
+            <slot><strong>Default!</strong> Hello World~</slot>
+            <span @click='del' class='Alert__close'>x</span>
+         </div>
+      </template>
+      <script src='../lib/vue.js' type="text/javascript"></script>
+      <script type="text/javascript">
+         Vue.component('alert', {
+            template: '#alert-template',
+            props: ['type'],
+            data: ()=>({show: true}),
+            computed: {
+               alertClasses: function(){
+                  return {
+                     'Alert--Success': this.type === 'success',
+                     'Alert--Warning': this.type === 'warning',
+                     'Alert--Error' : this.type === 'error'
+                  }
+               }
+            },
+            methods: {
+               del: function(){
+                  this.show = false
+               }
+            }
+         });
+         new Vue({
+            el: '#app'
+         });
+      </script>
+   </body>
+</html>
